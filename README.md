@@ -14,12 +14,11 @@ This repository contains my implementations of seminal papers in robotics.
 This project uses `uv` for ultra-fast dependency management.
 
 ```bash
-# 1. Clone the repo
 git clone [https://github.com/yourname/Paper_Replications.git](https://github.com/yourname/Paper_Replications.git)
 cd Paper_Replications
 
-# 2. Sync dependencies (installs the local 'common' library automatically)
+# Sync dependencies 
 uv sync
 
-# 3. Run a demo
+# Run a demo
 uv run 01_RRT_Star_Karaman/main.py

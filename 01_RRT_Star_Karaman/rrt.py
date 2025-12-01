@@ -76,7 +76,6 @@ class RRT:
 
     def rrt(self): 
         V = [self.start];
-        E = []
         for i in range(0, self.iterations):
             rand = self.sample();
             while rand is None: 
@@ -86,7 +85,6 @@ class RRT:
             new = self.Steer(nearest, rand); 
             if self.CollisionTest(nearest, new):
                 V.append(new);
-                E.append([nearest.get_loc(), new.get_loc()])
                 p = shapely.geometry.Point(new.get_loc())
                 if self.env.end.contains(p):
                     self.goal_nodes.append(new)
@@ -97,28 +95,9 @@ class RRT:
                 self.cost_history.append(min_cost)
             else:
                 self.cost_history.append(None) 
-            
-            
-            save_frame = False
-                
-            if i < 500:
-                if i % 10 == 0: save_frame = True
-            elif i < 2500:
-                if i % 50 == 0: save_frame = True
-            elif i < 10000:
-                if i % 200 == 0: save_frame = True
-            else:
-                if i % 500 == 0: save_frame = True
-            
-            if i in [250, 500, 2500, 10000, 20000]:
-                save_frame = True
 
-            if save_frame:
-                self.env.update(E)
-                self.env.save_frame(i)
-
-        self.env.update(E);
-        self.env.save_frame(self.iterations);
+        E = [[node.parent.get_loc(), node.get_loc()] for node in V if node.parent is not None]    
+        self.env.draw_tree(E);
         return V, self.cost_history;
 
 class RRT_A(RRT):
@@ -138,7 +117,7 @@ class RRT_A(RRT):
             nearest = self.NearestNeighbour(V, rand);
             new = self.Steer(nearest, rand); 
             if self.CollisionTest(nearest, new):
-                y = 20 # Change according to random formula
+                y = 20 # Change according to random formula (in paper)
                 r = min(y*(np.log(len(V))/len(V))**(1/2), self.step);
                 nearNodes = self.NearVertices(V, new, r)
                 V.append(new); 
@@ -171,27 +150,7 @@ class RRT_A(RRT):
             else:
                 self.cost_history.append(None)
                     
-            save_frame = False
-            
-            if i < 500:
-                if i % 10 == 0: save_frame = True
-            elif i < 2500:
-                if i % 50 == 0: save_frame = True
-            elif i < 10000:
-                if i % 200 == 0: save_frame = True
-            else:
-                if i % 500 == 0: save_frame = True
-            
-            if i in [250, 500, 2500, 10000, 20000]:
-                save_frame = True
-
-            if save_frame:
-                E = [[node.parent.get_loc(), node.get_loc()] for node in V if node.parent is not None]
-                self.env.update(E)
-                self.env.save_frame(i)
-        
         E = [[node.parent.get_loc(), node.get_loc()] for node in V if node.parent is not None]
-        self.env.update(E);
-        self.env.save_frame(self.iterations);
+        self.env.draw_tree(E);
         return V, self.cost_history;
                           
