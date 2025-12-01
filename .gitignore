@@ -1,17 +1,19 @@
-# Python-generated files
+# --- Python & UV ---
 __pycache__/
-*.py[oc]
-build/
-dist/
-wheels/
-*.egg-info
+*.pyc
+.venv/
+.python-version
 
-# Virtual environments
-.venv
-.DS_Store 
-.vscode 
-uv.lock
-frames
-frames2
-tmp
-rrt*
+# --- OS Specific ---
+.DS_Store
+
+# --- IDEs ---
+.vscode/
+.idea/
+other/
+
+# Ignore generated plots and GIFs
+# (You should Force Add specific 'hero' images for your README manually)
+*.png
+*.gif
+*.pdf
